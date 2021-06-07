@@ -92,4 +92,11 @@ require'nvim-treesitter.configs'.setup {
             ['.'] = 'textsubjects-smart',
         }
     },
+    tree_docs = {
+        enable = true,
+        mapping = {
+            doc_node_at_cursor = "zd",
+            doc_all_in_range = "zd",
+        }
+    }
 }

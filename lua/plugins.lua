@@ -183,6 +183,8 @@ return require("packer").startup(function(use)
     use {"jpalardy/vim-slime", opt = true}
     -- https://github.com/tpope/vim-repeat
 
+    use "Olical/aniseed"
+
     -- lsp extensions
     use {"nvim-lua/lsp_extensions.nvim", opt = true}
     use {"nvim-lua/completion-nvim", opt = true}
@@ -190,6 +192,7 @@ return require("packer").startup(function(use)
     use "ray-x/lsp_signature.nvim"
     use "nvim-treesitter/nvim-treesitter-textobjects"
     use "RRethy/nvim-treesitter-textsubjects"
+    use "nvim-treesitter/nvim-tree-docs"
 
     require_plugin("ultisnips")
     require_plugin("vim-slime")
@@ -209,6 +212,7 @@ return require("packer").startup(function(use)
     require_plugin("vim-visual-multi")
     require_plugin("vim-sneak")
     require_plugin("nvim-treesitter-textobjects")
+    require_plugin("nvim-tree-docs")
 
     -- Colorschemes
     -- use {'Mofiqul/dracula.nvim', opt=true}
