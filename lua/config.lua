@@ -71,7 +71,6 @@ O = {
     },
   },
   python_interp = "/usr/bin/python3.9", -- TODO: make a venv for this
-  -- @usage pass a table with your desired languages
   treesitter = {
     ensure_installed = "all",
     ignore_install = {},

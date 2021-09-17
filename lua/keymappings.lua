@@ -855,6 +855,7 @@ map("x", "<M-S-B>", "<Esc>BviWo", sile) ]]
       c = { telescope_fn.git_commits, "Checkout commit" },
       C = { telescope_fn.git_bcommits, "Checkout commit(for current file)" },
       f = { cmd "Git", "Fugitive Status" },
+      [" "] = { ":Git ", "Fugitive ..." },
       -- TODO: what are the important fugitive commands?
     },
     l = {

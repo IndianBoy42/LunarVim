@@ -5,7 +5,6 @@ M.config = function()
   hop.setup()
 end
 
-local from_fn = utils.cmd.from
 M.keymaps = function()
   if O.plugin.hop then
     -- TODO: register_nN_repeat here??
