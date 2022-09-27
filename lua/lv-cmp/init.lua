@@ -28,12 +28,15 @@ function M.sources(list)
   local cmp = require "cmp"
   cmp.setup.buffer { sources = cmp.config.sources(unpack(list)) }
 end
+
 function M.autocomplete(enable)
   require("cmp").setup.buffer { completion = { autocomplete = enable } }
 end
+
 function M.add_sources(highprio, lowprio)
   M.sources(vim.list_extend(vim.list_extend({ highprio }, default_sources), { lowprio }))
 end
+
 function M.setup()
   local cmp = require "cmp"
   local lspkind = require "lspkind"
@@ -42,11 +45,13 @@ function M.setup()
   local function t(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
   end
+
   local feedkeys = vim.api.nvim_feedkeys
   local function check_back_space()
     local col = vim.fn.col "." - 1
     return col == 0 or vim.fn.getline("."):sub(col, col):match "%s" ~= nil
   end
+
   function M.supertab(when_cmp_visible)
     return function()
       if cmp.visible() then
@@ -88,9 +93,11 @@ function M.setup()
       "c",
     })
   end
+
   local function autocomplete()
     cmp.complete { reason = cmp.ContextReason.Auto }
   end
+
   local function complete_or(mapping)
     return double_mapping(autocomplete, mapping)
   end
@@ -109,13 +116,15 @@ function M.setup()
     -- confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
     -- experimental = { ghost_text = true },
 
-    documentation = {
-      border = "single",
-      winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-      max_width = 120,
-      min_width = 60,
-      max_height = math.floor(vim.o.lines * 0.3),
-      min_height = 1,
+    window = {
+      documentation = cmp.config.window.bordered {
+        border = "single",
+        winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+        max_width = 120,
+        min_width = 60,
+        max_height = math.floor(vim.o.lines * 0.3),
+        min_height = 1,
+      },
     },
 
     -- TODO: better mapping setup for enter, nextitem and close window

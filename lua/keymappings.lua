@@ -1261,7 +1261,7 @@ function M.setup()
   if O.plugin.nabla then
     leaderMappings["xn"] = {
       function()
-        require("nabla").action()
+        require("nabla").popup()
       end,
       "Nabla",
     }

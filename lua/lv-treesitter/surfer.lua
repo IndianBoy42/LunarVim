@@ -1,32 +1,47 @@
 local M = {}
 M.config = function()
-  local set = vim.keymap.set
-  local surf = require "syntax-tree-surfer"
-  -- .select() will show you what you will be swapping with .move(), you'll get used to .select() and .move() behavior quite soon!
-  set("n", "vx", surf.select, {})
-  -- .select_current_node() will select the current node at your cursor
-  set("n", "vn", surf.select_current_node, {})
+  -- Syntax Tree Surfer
+  local opts = { noremap = true, silent = true }
 
-  -- NAVIGATION: Only change the keymap to your liking. I would not recommend changing anything about the .surf() parameters!
-  set("x", "J", function()
-    surf.surf("next", "visual")
-  end, {})
-  set("x", "K", function()
-    surf.surf("prev", "visual")
-  end, {})
-  set("x", "H", function()
-    surf.surf("parent", "visual")
-  end, {})
-  set("x", "L", function()
-    surf.surf("child", "visual")
-  end, {})
+  -- Normal Mode Swapping:
+  -- Swap The Master Node relative to the cursor with it's siblings, Dot Repeatable
+  vim.keymap.set("n", "vU", function()
+    vim.opt.opfunc = "v:lua.STSSwapUpNormal_Dot"
+    return "g@l"
+  end, { silent = true, expr = true })
+  vim.keymap.set("n", "vD", function()
+    vim.opt.opfunc = "v:lua.STSSwapDownNormal_Dot"
+    return "g@l"
+  end, { silent = true, expr = true })
 
-  -- SWAPPING WITH VISUAL SELECTION: Only change the keymap to your liking. Don't change the .surf() parameters!
-  set("x", "<A-j>", function()
-    surf.surf("next", "visual", true)
-  end, {})
-  set("x", "<A-k>", function()
-    surf.surf("prev", "visual", true)
-  end, {})
+  -- Swap Current Node at the Cursor with it's siblings, Dot Repeatable
+  vim.keymap.set("n", "vd", function()
+    vim.opt.opfunc = "v:lua.STSSwapCurrentNodeNextNormal_Dot"
+    return "g@l"
+  end, { silent = true, expr = true })
+  vim.keymap.set("n", "vu", function()
+    vim.opt.opfunc = "v:lua.STSSwapCurrentNodePrevNormal_Dot"
+    return "g@l"
+  end, { silent = true, expr = true })
+
+  --> If the mappings above don't work, use these instead (no dot repeatable)
+  -- vim.keymap.set("n", "vd", '<cmd>STSSwapCurrentNodeNextNormal<cr>', opts)
+  -- vim.keymap.set("n", "vu", '<cmd>STSSwapCurrentNodePrevNormal<cr>', opts)
+  -- vim.keymap.set("n", "vD", '<cmd>STSSwapDownNormal<cr>', opts)
+  -- vim.keymap.set("n", "vU", '<cmd>STSSwapUpNormal<cr>', opts)
+
+  -- Visual Selection from Normal Mode
+  vim.keymap.set("n", "vx", "<cmd>STSSelectMasterNode<cr>", opts)
+  vim.keymap.set("n", "vn", "<cmd>STSSelectCurrentNode<cr>", opts)
+
+  -- Select Nodes in Visual Mode
+  vim.keymap.set("x", "J", "<cmd>STSSelectNextSiblingNode<cr>", opts)
+  vim.keymap.set("x", "K", "<cmd>STSSelectPrevSiblingNode<cr>", opts)
+  vim.keymap.set("x", "H", "<cmd>STSSelectParentNode<cr>", opts)
+  vim.keymap.set("x", "L", "<cmd>STSSelectChildNode<cr>", opts)
+
+  -- Swapping Nodes in Visual Mode
+  vim.keymap.set("x", "<A-j>", "<cmd>STSSwapNextVisual<cr>", opts)
+  vim.keymap.set("x", "<A-k>", "<cmd>STSSwapPrevVisual<cr>", opts)
 end
 return M

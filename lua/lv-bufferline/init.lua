@@ -25,8 +25,8 @@ function M.config()
     },
     highlights = {
       fill = {
-        guifg = { attribute = "fg", highlight = "Normal" },
-        guibg = { attribute = "bg", highlight = "StatusLineNC" },
+        fg = { attribute = "fg", highlight = "Normal" },
+        bg = { attribute = "bg", highlight = "StatusLineNC" },
       },
       -- background = {
       --     guifg = {attribute = "fg", highlight = "Normal"},

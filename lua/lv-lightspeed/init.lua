@@ -12,8 +12,13 @@ function M.config()
     cycle_group_fwd_key = nil,
     cycle_group_bwd_key = nil,
   }
-  vim.keymap.del({ "o", "x" }, ",")
+  -- vim.keymap.del({ "o", "x" }, ",")
   vim.keymap.set("n", "s", "<Plug>Lightspeed_omni_s")
+end
+
+function M.leap()
+  require("leap").set_default_keymaps()
+  -- vim.keymap.del({ "o", "x" }, ",")
 end
 
 function M.au_unconceal(level)

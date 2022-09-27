@@ -70,10 +70,10 @@ function M.autopairs()
   -- TODO:move all of this to luasnip autosnippets cos why not?
   local texmods = {
     ["\\left"] = "\\right",
-    ["\\big"] = "\\big",
-    ["\\bigg"] = "\\bigg",
-    ["\\Big"] = "\\Big",
-    ["\\Bigg"] = "\\Bigg",
+    -- ["\\big"] = "\\big",
+    -- ["\\bigg"] = "\\bigg",
+    -- ["\\Big"] = "\\Big",
+    -- ["\\Bigg"] = "\\Bigg",
   }
   local texpairs = {
     ["\\("] = "\\)",

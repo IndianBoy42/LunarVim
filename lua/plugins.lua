@@ -821,9 +821,10 @@ return packer.startup(function(use)
 
   -- 2 letter find at lightspeed
   use {
-    "ggandor/lightspeed.nvim",
+    -- "ggandor/lightspeed.nvim",
+    "ggandor/leap.nvim",
     config = function()
-      require("lv-lightspeed").config()
+      require("lv-lightspeed").leap()
     end,
     disable = not O.plugin.lightspeed,
   }
@@ -1199,15 +1200,6 @@ return packer.startup(function(use)
     end,
     cmd = "Twilight",
     disable = not O.plugin.twilight,
-  }
-  -- Zen Mode
-  use {
-    "Pocco81/TrueZen.nvim",
-    cmd = { "TZAtaraxis", "TZMinimalist", "TZFocus" },
-    config = function()
-      require("lv-zen").config()
-    end,
-    disable = not O.plugin.zen,
   }
   -- Auto split management
   use {

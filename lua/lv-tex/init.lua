@@ -393,6 +393,30 @@ local function mi(dep)
   end, { dep })
 end
 
+local cpairs = {
+  ["("] = ")",
+  ["["] = "]",
+  ["\\("] = "\\)",
+  ["\\["] = "\\]",
+  ["\\{"] = "\\}",
+  ["\\|"] = "\\|",
+  ["\\langle "] = "\\rangle",
+  ["\\lceil "] = "\\rceil",
+  ["\\lfloor "] = "\\rfloor",
+}
+local function pairing(ss, es)
+  s(ss, {
+    t(ss),
+    i(1),
+    i(0),
+    t(es),
+    f(function(nodes, arg)
+      local input = nodes[1]
+      return cpairs[input] or input
+    end, { 1 }),
+  })
+end
+
 local function fmt(fn, ipairs)
   if ipairs == nil then
     ipairs = {}
@@ -797,10 +821,10 @@ list_extend(auto, {
       return string.format("%s_%s", cap[1], cap[2])
     end, {}),
     {
-    condition = function(_, matched_trigger)
-      return (mathmode_() ~= 0) and (matched_trigger:sub(2, 2) == matched_trigger:sub(3, 3))
-    end,
-  }
+      condition = function(_, matched_trigger)
+        return (mathmode_() ~= 0) and (matched_trigger:sub(2, 2) == matched_trigger:sub(3, 3))
+      end,
+    }
   ),
   ms(renw "__", { t "_{", i(0), t "}" }),
   ms(renw "%^%^", { t "^{", i(0), t "}" }),
@@ -1079,7 +1103,7 @@ function M.ftplugin()
     l = { cmd "TexlabBuild", "Texlab Build" },
     n = {
       function()
-        require("nabla").action()
+        require("nabla").popup()
       end,
       "Nabla",
     },

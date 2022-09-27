@@ -90,6 +90,7 @@ function M.echo_diagnostic()
     api.nvim_echo(chunks, false, {})
   end, echo_timeout)
 end
+
 function M.simple_echo_diagnostic()
   local line_diagnostics = diags.get_line_diagnostics()
   if vim.tbl_isempty(line_diagnostics) then
@@ -108,6 +109,7 @@ local termcodes = vim.api.nvim_replace_termcodes
 local function t(k)
   return termcodes(k, true, true, true)
 end
+
 -- Format a range using LSP
 function M.format_range_operator()
   local old_func = vim.go.operatorfunc
@@ -141,6 +143,7 @@ function M.range_diagnostics(opts, buf_nr, start, finish)
     end
     return ((finish[1] >= diag.range["start"].line) and (start[1] <= diag.range["end"].line))
   end
+
   local diagnostics = diags.get(buf_nr, nil, match_position_predicate)
   -- if opts.severity then
   --   range_diagnostics = filter_to_severity_limit(opts.severity, range_diagnostics)
@@ -283,21 +286,27 @@ local popup_diagnostics_opts = {
 function M.diag_line()
   diags.open_float(0, vim.tbl_deep_extend("keep", { scope = "line" }, popup_diagnostics_opts))
 end
+
 function M.diag_cursor()
   diags.open_float(0, vim.tbl_deep_extend("keep", { scope = "cursor" }, popup_diagnostics_opts))
 end
+
 function M.diag_buffer()
   diags.open_float(0, vim.tbl_deep_extend("keep", { scope = "buffer" }, popup_diagnostics_opts))
 end
+
 function M.diag_next(opts)
   diags.goto_next(vim.tbl_extend("keep", opts or {}, { enable_popup = true, float = popup_diagnostics_opts }))
 end
+
 function M.diag_prev(opts)
   diags.goto_prev(vim.tbl_extend("keep", opts or {}, { enable_popup = true, float = popup_diagnostics_opts }))
 end
+
 function M.error_next()
   M.diag_next { severity = vim.diagnostic.severity.ERROR }
 end
+
 function M.error_prev()
   M.diag_prev { severity = vim.diagnostic.severity.ERROR }
 end
@@ -422,6 +431,7 @@ M.renamer = (function()
     vim.keymap.del("i", "<CR>")
     vim.keymap.del("i", "<ESC><ESC>")
   end
+
   local function enter_cb(old, oldpos)
     -- local cword = vim.fn.expand "<cword>"
     -- utils.dump(cword)
@@ -437,12 +447,14 @@ M.renamer = (function()
       vim.lsp.buf.rename(cword)
     end, 1)
   end
+
   local function cancel_cb(old)
     vim.cmd "stopinsert"
     -- feedkeys(t "u", "n", false)
     feedkeys(t("ciw" .. old .. "<ESC>"), "n", false)
     del_keymaps()
   end
+
   local function mk_keymaps(old)
     local enter = function()
       enter_cb(old, vim.api.nvim_win_get_cursor(0))
@@ -454,6 +466,7 @@ M.renamer = (function()
     vim.keymap.setl("i", "<M-CR>", enter, { silent = true })
     vim.keymap.setl("i", "<ESC><ESC>", cancel, { silent = true })
   end
+
   return function()
     local old = vim.fn.expand "<cword>"
     feedkeys(t "viw<C-G>", "n", false) -- Go select mode
@@ -463,19 +476,15 @@ end)()
 -- M.rename = M.renamer.keymap
 
 M.format_on_save = function(disable)
-  local augroup = {
-    {
-      "BufWritePre",
-      "*",
-      "lua vim.lsp.buf.formatting_seq_sync(nil, " .. O.format_on_save_timeout .. ")",
-    },
-  }
   if disable then
-    augroup = {}
+    return
   end
-  require("lv-utils").define_augroups {
-    autoformat = augroup,
-  }
+  local id = vim.api.nvim_create_augroup("format_on_save", { clear = true })
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function()
+      vim.lsp.buf.format { timeout_ms = O.format_on_save_timeout }
+    end,
+  })
 end
 
 vim.lsp.buf.cancel_formatting = function(bufnr)
