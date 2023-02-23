@@ -158,7 +158,7 @@ function M.activate_magma(kernel)
     x = "Magma",
     ["xx"] = { "<cmd>MagmaEvaluateLine<CR>", "Run Line" },
     ["x<CR>"] = { ",rij", "Run Line" },
-    ["x,"] = { "<cmd>MagmaReevaluateCell<CR>", "Rerun Cell" },
+    ["X"] = { "<cmd>MagmaReevaluateCell<CR>", "Rerun Cell" },
     ["xd"] = { "<cmd>MagmaDelete<CR>", "Magma Delete" },
     t = "Terminal",
     ["to"] = { "<cmd>MagmaShowOutput<cr>", "Magma Output" },
@@ -236,11 +236,12 @@ function M.mdeval()
     #include <iostream>
     #include <vector>
     using namespace std;
-      ]],
+      ]] ,
       },
     },
   }
 end
+
 function M.mdeval_keymaps()
   mappings.localleader {
     -- ["c"] = { "<cmd>lua require 'mdeval'.eval_code_block()<CR>", "Eval Code Block" },
@@ -252,6 +253,7 @@ function M.mdeval_keymaps()
     },
   }
 end
+
 function M.jupyter_ascending()
   vim.keymap.setl("n", "<localleader>j", "<Plug>JupyterExecute")
   -- mappings.localleader {

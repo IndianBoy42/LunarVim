@@ -34,8 +34,8 @@ M.ftplugin = function()
   -- TODO: clangd_extensions + lsp-installer??
   require("clangd_extensions").setup {
     server = {
-      cmd = require("lsp.config").get_cmd "clangd",
-      cmd_env = require("lsp.config").get_cmd_env "clangd",
+      -- cmd = require("lsp.config").get_cmd "clangd",
+      -- cmd_env = require("lsp.config").get_cmd_env "clangd",
 
       extra_cmd_args = clangd_flags,
       commands = {

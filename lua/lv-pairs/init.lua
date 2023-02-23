@@ -19,6 +19,7 @@ function M.tabout()
 end
 
 function M.autopairs()
+  -- TODO: Remove and use luasnip for everything
   local npairs = require "nvim-autopairs"
   local R = require "nvim-autopairs.rule"
 
@@ -44,12 +45,13 @@ function M.autopairs()
   end
 
   npairs.setup {
-    check_ts = true,
+    disable_filetype = { "tex" },
     ts_config = {
       lua = { "string" }, -- it will not add pair on that treesitter node
       javascript = { "template_string" },
       java = false, -- don't check treesitter on java
     },
+    fast_wrap = {},
   }
 
   require("nvim-treesitter.configs").setup { autopairs = { enable = true } }
@@ -69,13 +71,14 @@ function M.autopairs()
   -- press % => %% is only inside comment or string
   -- TODO:move all of this to luasnip autosnippets cos why not?
   local texmods = {
-    ["\\left"] = "\\right",
+    -- ["\\left"] = "\\right",
     -- ["\\big"] = "\\big",
     -- ["\\bigg"] = "\\bigg",
     -- ["\\Big"] = "\\Big",
     -- ["\\Bigg"] = "\\Bigg",
   }
   local texpairs = {
+    ["|"] = "|",
     ["\\("] = "\\)",
     ["\\["] = "\\]",
     ["\\{"] = "\\}",
@@ -88,18 +91,20 @@ function M.autopairs()
     ["("] = ")",
     ["["] = "]",
     ["{"] = "}",
+    ["."] = "|",
   }
+  local cond = require "nvim-autopairs.conds"
   for lm, rm in pairs(texmods) do
     for lp, rp in pairs(texpairs) do
-      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex"))
+      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex")) --:with_pair(cond.not_after_regex "%w")
     end
     for lp, rp in pairs(basicpairs) do
-      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex"))
+      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex")) --:with_pair(cond.not_after_regex "%w")
     end
   end
   for lp, rp in pairs(texpairs) do
     -- npairs.add_rule(R(lp, " " .. rp, "tex"))
-    npairs.add_rule(R(lp, rp, "tex"))
+    npairs.add_rule(R(lp, rp, "tex")) --:with_pair(cond.not_after_regex "%w")
   end
 
   -- lua utils.dump(MPairs.state.rules)
@@ -110,6 +115,7 @@ function M.sandwich_setup()
   vim.g.operator_sandwich_no_default_key_mappings = 1
   vim.g.textobj_sandwich_no_default_key_mappings = 1
 end
+
 function M.sandwich()
   -- vim.cmd "runtime macros/sandwich/keymap/surround.vim"
   vim.cmd [[

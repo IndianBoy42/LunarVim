@@ -47,8 +47,8 @@ O = {
   signcolumn = "number", -- "yes" for always
   notify = {
     timeout = 2000, -- 5000 default
+    background_colo_r = "#FFFFFF",
     stages = "fade_in_slide_out",
-    background_colour = "Normal",
   },
   breakpoint_sign = { text = "🛑", texthl = "LspDiagnosticsSignError", linehl = "", numhl = "" },
   input_border = "rounded",
@@ -373,12 +373,7 @@ O = {
 vim.cmd('let &titleold="' .. _G.TERMINAL .. '"')
 -- After changing plugin config it is recommended to run :PackerCompile
 local disable_plugins = {
-  "fzf",
-  "tabnine",
-  "tmux_navigator",
-  "lazygit",
   "anywise_reg",
-  "quickscope",
   "bullets",
   "coq",
   "ts_textunits",

@@ -52,6 +52,7 @@ function M.setup()
     return col == 0 or vim.fn.getline("."):sub(col, col):match "%s" ~= nil
   end
 
+  -- Concatenate strings in the list
   function M.supertab(when_cmp_visible)
     return function()
       if cmp.visible() then
@@ -143,7 +144,14 @@ function M.setup()
         i = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
         c = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
       },
-      ["<M-l>"] = complete_or(cmp.confirm),
+      ["<M-l>"] = complete_or(function()
+        cmp.confirm(cmdline_confirm)
+      end),
+      ["<C-space>"] = cmp.mapping {
+        i = function()
+          cmp.complete()
+        end,
+      },
       -- TODO: overload this with Luasnip close choice node
       ["<M-h>"] = cmp.mapping(cmp.mapping.close(), { "i", "c" }),
       ["<Esc>"] = cmp.mapping(cmp.mapping.close(), { "c" }),
@@ -153,7 +161,8 @@ function M.setup()
       --   c = cmp.mapping.confirm(cmdline_confirm),
       -- },
       ["<CR>"] = cmp.mapping {
-        i = cmp.mapping.confirm(confirmopts),
+        -- i = cmp.mapping.confirm(confirmopts),
+        i = cmp.mapping.confirm(cmdline_confirm),
         -- c = cmp.mapping.confirm(cmdline_confirm),
       },
       ["<Tab>"] = cmp.mapping {

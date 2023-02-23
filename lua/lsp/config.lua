@@ -56,7 +56,7 @@ else
     config = inject_conf(config)
     -- Set default client capabilities plus window/workDoneProgress
     config.capabilities = M.caps(config.capabilities)
-    config.capabilities = require("cmp_nvim_lsp").update_capabilities(config.capabilities)
+    config.capabilities = require("cmp_nvim_lsp").default_capabilities(config.capabilities)
     return config
   end
 end

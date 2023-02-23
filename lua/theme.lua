@@ -2,6 +2,7 @@
 
 -- My fav/common themes
 utils.new_command.Zenbones = "colorscheme zenbones"
+utils.new_command.Kanagawa = "colorscheme kanagawa"
 utils.new_command.Nordbones = "colorscheme nordbones"
 utils.new_command.LightMelya = "colorscheme light_melya"
 utils.new_command.Nebulous = "lua require'theme'.nebulous()"

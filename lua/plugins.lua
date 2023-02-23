@@ -63,16 +63,20 @@ return packer.startup(function(use)
 
   -- Lsp Configs
   use { "neovim/nvim-lspconfig" }
-  -- use "williamboman/nvim-lsp-installer"
   use {
     -- "kabouzeid/nvim-lspinstall",
-    "https://github.com/williamboman/nvim-lsp-installer", -- Use this
+    -- "https://github.com/williamboman/nvim-lsp-installer", -- Use this
     -- https://github.com/alexaandru/nvim-lspupdate.git
+    "williamboman/mason.nvim",
     config = function()
       require "lv-lspinstall"
     end,
-    cmd = { "LspInstall", "LspInstallInfo", "LspUninstall", "LspUninstallAll", "LspInstallLog", "LspPrintInstalled" },
-    module = "nvim-lsp-installer",
+    cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonLog" },
+    module = "mason",
+  }
+  use {
+    "williamboman/mason-lspconfig.nvim",
+    after = "mason.nvim",
   }
 
   -- Utilities
@@ -178,13 +182,6 @@ return packer.startup(function(use)
   }
   -- Common set of snippets
   use { "rafamadriz/friendly-snippets", disable = not O.plugin.luasnip }
-  -- Tabnine
-  use {
-    "tzachar/cmp-tabnine",
-    run = "./install.sh",
-    requires = "hrsh7th/nvim-cmp",
-    disable = not O.plugin.cmp or not O.plugin.tabnine,
-  }
 
   -- Autopairs
   use {
@@ -275,6 +272,7 @@ return packer.startup(function(use)
 
   use {
     "akinsho/nvim-bufferline.lua",
+    branch = "main",
     --         "romgrk/barbar.nvim",
     config = function()
       require("lv-bufferline").config()
@@ -628,23 +626,19 @@ return packer.startup(function(use)
     disable = not O.plugin.bracey,
   }
 
-  -- Tmux navigator
-  use { "christoomey/vim-tmux-navigator", disable = not O.plugin.tmux_navigator }
-
   use {
     "zbirenbaum/copilot.lua",
-    event = "InsertEnter",
+    event = "VimEnter",
     config = function()
-      vim.schedule(function()
-        vim.schedule(function()
-          require("copilot").setup()
-        end)
-      end)
+      require("lv-copilot").setup()
     end,
   }
   use {
     "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua", "nvim-cmp" },
+    after = { "copilot.lua" },
+    config = function()
+      require("lv-copilot").setup_cmp()
+    end,
   }
   -- use {
   --   "github/copilot.vim",
@@ -708,6 +702,7 @@ return packer.startup(function(use)
     config = function()
       require("lsp.clangd").setup()
     end,
+    module = "clangd_extensions",
     ft = { "c", "cpp" },
   }
   use {
@@ -809,16 +804,6 @@ return packer.startup(function(use)
     disable = not O.plugin.lsp_lines,
   }
 
-  -- See jumpable characters
-  use {
-    "unblevable/quick-scope",
-    event = BufRead,
-    setup = function()
-      vim.g.qs_highlight_on_keys = O.plugin.quickscope.on_keys
-    end,
-    disable = not O.plugin.quickscope,
-  }
-
   -- 2 letter find at lightspeed
   use {
     -- "ggandor/lightspeed.nvim",
@@ -827,6 +812,12 @@ return packer.startup(function(use)
       require("lv-lightspeed").leap()
     end,
     disable = not O.plugin.lightspeed,
+  }
+  use {
+    "ggandor/flit.nvim",
+    config = function()
+      require("flit").setup {}
+    end,
   }
 
   -- Multi cursor support
@@ -851,10 +842,6 @@ return packer.startup(function(use)
     disable = not O.plugin.surround,
   }
   -- TODO: use surround.nvim
-
-  -- fzf based search
-  use { "junegunn/fzf", disable = not O.plugin.fzf } -- Telescope does most of this?
-  use { "junegunn/fzf.vim", disable = not O.plugin.fzf }
 
   -- Run commands async
   -- use {"skywind3000/asyncrun.vim"}
@@ -1352,6 +1339,7 @@ return packer.startup(function(use)
   use { "tjdevries/colorbuddy.vim", module = "colorbuddy" }
   -- Colorschemes -- https://github.com/folke/lsp-colors.nvim
   use { "Yagua/nebulous.nvim" }
+  use { "rebelot/kanagawa.nvim" }
   -- use { "christianchiarulli/nvcode-color-schemes.vim", opt = true }
   -- use {
   --   "catppuccin/nvim",

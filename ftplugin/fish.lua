@@ -21,13 +21,9 @@ local nl = t { "", "" }
 local function nlt(line)
   return t { "", line }
 end
+
 local function tnl(line)
   return t { line, "" }
-end
-local function mi(dep)
-  return f(function(nodes)
-    return nodes[1]
-  end, { dep })
 end
 
 require("luasnip").add_snippets("fish", {
@@ -54,7 +50,7 @@ require("luasnip").add_snippets("fish", {
     t " --wraps=",
     i(2),
     t { "", "\t" },
-    mi(2),
+    r(2),
     t " ",
     i(0),
     t { "", "end" },

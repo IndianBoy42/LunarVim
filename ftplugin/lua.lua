@@ -1,5 +1,5 @@
 -- https://github.com/sumneko/lua-language-server/wiki/Build-and-Run-(Standalone)
-require("lsp.config").lspconfig "sumneko_lua" {
+require("lsp.config").lspconfig "lua_ls" {
   settings = {
     Lua = {
       runtime = {

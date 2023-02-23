@@ -79,6 +79,7 @@ function M.setup()
   local function nlt(line)
     return t { "", line }
   end
+
   local function tnl(line)
     return t { line, "" }
   end
@@ -123,9 +124,9 @@ function M.setup()
       -- t { "", "" },
       i(0),
       t { "", "end" },
-      -- mi(1),
+      -- r(1),
       -- t "(",
-      -- mi(2),
+      -- r(2),
       -- t { ")", "" },
     }),
     s("function", {
@@ -136,9 +137,9 @@ function M.setup()
       -- t { "", "" },
       i(0),
       t { "", "end" },
-      -- mi(1),
+      -- r(1),
       -- t "(",
-      -- mi(2),
+      -- r(2),
       -- t { ")", "" },
     }),
     s("iife", {
@@ -147,9 +148,9 @@ function M.setup()
       -- t { "", "" },
       i(0),
       t { "", "end)()" },
-      -- mi(1),
+      -- r(1),
       -- t "(",
-      -- mi(2),
+      -- r(2),
       -- t { ")", "" },
     }),
   })
@@ -172,6 +173,7 @@ function M.get_snippet(name, ft)
   end
   return nil
 end
+
 function M.expand_by_name(name, ft)
   require("luasnip").snip_expand(M.get_snippet(name, ft))
 end

@@ -316,6 +316,15 @@ function M.setup()
   map("t", "<C-k>", [[<C-\><C-N>]] .. focus_fn "split_command('k')", sile)
   map("t", "<C-l>", [[<C-\><C-N>]] .. focus_fn "split_command('l')", sile)
   map("t", "<Esc>", [[<C-\><C-n>]], nore)
+  map("n", "<C-w><C-q>", function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local config = vim.api.nvim_win_get_config(win)
+      if config.relative ~= "" then
+        vim.api.nvim_win_close(win, false)
+        print("Closing window", win)
+      end
+    end
+  end)
 
   local resize_prefix = "<C-"
   if vim.fn.has "mac" == 1 then
@@ -636,8 +645,10 @@ function M.setup()
 
   -- Formatting keymaps
   map("n", "gq", require("lsp.functions").format_range_operator, sile)
-  map("x", "gq", vim.lsp.buf.range_formatting, sile)
-  map("n", "gf", vim.lsp.buf.formatting, sile)
+  map("x", "gq", vim.lsp.buf.format, sile)
+  map("n", "gf", function()
+    vim.lsp.buf.format { async = true }
+  end, sile)
 
   -- TODO: Use more standard regex syntax
   -- map("n", "/", "/\v", nore)
@@ -764,7 +775,9 @@ function M.setup()
   -- Plugin keymaps
   require("lv-zen").keymaps()
   require("lv-dial").keymaps()
-  require("lv-gestures").keymaps()
+  if O.plugin.gesture then
+    require("lv-gestures").keymaps()
+  end
 
   -- Terminal pass through escape key
   map("t", "<ESC>", "<ESC>", nore)
@@ -900,7 +913,7 @@ function M.setup()
       a = { cmd "wa", "Write All" },
       c = { cmd "Bdelete!", "Close" },
       d = { cmd "bdelete!", "Close+Win" },
-      f = { vim.lsp.buf.formatting, "Format" },
+      f = { vim.lsp.buf.format, "Format" },
       -- n = { cmd "tabnew", "New" },
       n = { cmd "enew", "New" },
       -- W = {cmd "BufferWipeout", "wipeout buffer"},
@@ -1046,14 +1059,14 @@ function M.setup()
       i = {
         l = { cmd "LspInfo", "LSP" },
         n = { cmd "NullLsInfo", "Null-ls" },
-        i = { cmd "LspInstallInfo", "LspInstall" },
+        i = { cmd "Mason", "LspInstall" },
         t = { cmd "TSConfigInfo", "Treesitter" },
       },
       h = { lspbuf.hover, "Hover (gh)" },
       a = { do_code_action, "Code Action (K)" },
       k = { vim.lsp.codelens.run, "Run Code Lens (gK)" },
       t = { lspbuf.type_definition, "Type Definition" },
-      f = { lspbuf.formatting, "Format" },
+      f = { lspbuf.format, "Format" },
       c = {
         name = "Calls",
         i = { lspbuf.incoming_calls, "Incoming" },
@@ -1195,8 +1208,8 @@ function M.setup()
   if O.plugin.trouble then
     -- TODO: make sure this is symmetric with <leader>s (telescope search)
     leaderMappings["d<space>"] = { cmd "TroubleToggle", "Trouble Toggle" }
-    leaderMappings["dd"] = { cmd "TroubleToggle lsp_document_diagnostics", "Document" }
-    leaderMappings["dD"] = { cmd "TroubleToggle lsp_workspace_diagnostics", "Workspace" }
+    leaderMappings["dd"] = { cmd "TroubleToggle document_diagnostics", "Document" }
+    leaderMappings["dD"] = { cmd "TroubleToggle workspace_diagnostics", "Workspace" }
     leaderMappings["dr"] = { cmd "TroubleToggle lsp_references", "References" }
     leaderMappings["ds"] = { cmd "TroubleToggle lsp_definitions", "Definitions" }
     leaderMappings["dq"] = { cmd "TroubleToggle quickfix", "Quick Fixes" }

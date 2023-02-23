@@ -1,5 +1,6 @@
 local M = {}
 function M.ftplugin()
+  -- TODO: update this
   mappings.localleader {
     m = { "<Cmd>RustExpandMacro<CR>", "Expand Macro" },
     H = { "<Cmd>RustToggleInlayHints<CR>", "Toggle Inlay Hints" },
@@ -25,6 +26,7 @@ function M.ftplugin()
   --   },
   -- }
 end
+
 function M.setup()
   local function postfix_wrap_call(trig, call, requires)
     return {
@@ -36,6 +38,7 @@ function M.setup()
       scope = "expr",
     }
   end
+
   local snippets = {
     ["Arc::new"] = postfix_wrap_call("arc", "Arc::new", "std::sync::Arc"),
     ["Mutex::new"] = postfix_wrap_call("mutex", "Mutex::new", "std::sync::Mutex"),
@@ -153,8 +156,11 @@ function M.crates_ftplugin()
     U = { ":lua require('crates').upgrade_crates()<cr>", "Upgrade" },
   }
 end
+
 function M.crates_setup()
+  -- TODO: update to nvim api
   -- vim.cmd [[autocmd FileType toml lua require("lv-cmp").add_sources { { name = "crates" } }]]
   vim.cmd [[autocmd BufRead Cargo.toml lua require("lsp.rust").crates_ftplugin()]]
 end
+
 return M
